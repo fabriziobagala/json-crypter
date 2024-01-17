@@ -10,10 +10,17 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/src/JsonCrypter/bin/Debug/net8.0/JsonCrypter.dll",
-            "args": ["-o", "encrypt", "-f", "${workspaceFolder}/resources/example.json", "-p", "qwerty"],
+            "args": ["-o", "encrypt", "-f", "${workspaceFolder}/resources/example.json", "-p", "${input:password}"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console": "internalConsole"
+        }
+    ],
+    "inputs": [
+        {
+            "id": "password",
+            "type": "promptString",
+            "description": "Please enter the password."
         }
     ]
 }
