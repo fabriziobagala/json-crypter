@@ -12,7 +12,7 @@ A console app for encrypting and decrypting JSON files using AES-GCM 256, with k
 
 Before you start, make sure you have met the following requirement:
 
-- [.NET 8](https://dotnet.microsoft.com/en-us/download)
+- [.NET SDK](https://dotnet.microsoft.com/en-us/download)
 
 ## Usage
 
