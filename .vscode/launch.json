@@ -10,7 +10,7 @@
             "request": "launch",
             "preLaunchTask": "build",
             "program": "${workspaceFolder}/src/JsonCrypter/bin/Debug/net8.0/JsonCrypter.dll",
-            "args": ["-o", "decrypt", "-f", "${workspaceFolder}/resources/example.json", "-p", "qwerty"],
+            "args": ["-o", "encrypt", "-f", "${workspaceFolder}/resources/example.json", "-p", "qwerty"],
             "cwd": "${workspaceFolder}",
             "stopAtEntry": false,
             "console": "internalConsole"
