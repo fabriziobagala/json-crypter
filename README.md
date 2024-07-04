@@ -100,7 +100,7 @@ Here are some examples of how you can use JsonCrypter:
 
 ## Publish
 
-### Configuring the Project File
+### AppHost
 
 First, you need to instruct the SDK to generate a native executable for your application. To do this, add the `UseAppHost` property to your `.csproj` file within a `PropertyGroup`. Your `.csproj` file should look something like this:
 
@@ -112,8 +112,6 @@ First, you need to instruct the SDK to generate a native executable for your app
 ```
 
 This configuration ensures that your application uses a native host, which is particularly beneficial when you're targeting specific runtimes or when you want your application to be self-contained.
-
-### Publishing the Application
 
 Once you have configured your project file, you can use the `dotnet publish` command to package your application. The command for publishing should specify the configuration, runtime, and publish options. Here's how you can structure the publish command:
 
