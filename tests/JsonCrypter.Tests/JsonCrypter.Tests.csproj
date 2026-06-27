@@ -23,7 +23,7 @@
   </ItemGroup>
 
   <ItemGroup>
-    <ProjectReference Include="..\JsonCrypter\JsonCrypter.csproj" />
+    <ProjectReference Include="..\..\src\JsonCrypter\JsonCrypter.csproj" />
   </ItemGroup>
 
 </Project>
