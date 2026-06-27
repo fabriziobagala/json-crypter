@@ -18,7 +18,7 @@ public class PathExtensionExceptionTests
     }
 
     [Fact]
-    public void ThrowIfNotJson_WithNonJsonExtension_ThrowsException()
+    public void ThrowIfNotJson_WithNonJsonExtension_ThrowsPathExtensionException()
     {
         // Arrange
         var filePath = "test.txt";

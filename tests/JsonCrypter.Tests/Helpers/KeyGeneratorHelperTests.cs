@@ -6,7 +6,7 @@ namespace JsonCrypter.Tests.Helpers;
 public class KeyGeneratorHelperTests
 {
     [Fact]
-    public void GenerateKeyBytes_ShouldReturnByteArrayOfCorrectLength()
+    public void GenerateKeyBytes_ValidInput_ReturnsByteArrayOfCorrectLength()
     {
         // Arrange
         var password = "testPassword";

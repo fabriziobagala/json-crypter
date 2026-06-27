@@ -8,31 +8,31 @@ namespace JsonCrypter.Tests.Helpers;
 public class JsonCryptoHelperTests
 {
     [Fact]
-    public void ProcessJson_ThrowsArgumentNullException_WhenJsonObjIsNull()
+    public void ProcessJson_NullJsonObj_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => JsonCryptoHelper.ProcessJson(null!, "password", Operation.Encrypt));
     }
 
     [Fact]
-    public void ProcessJson_ThrowsArgumentNullException_WhenPasswordIsNull()
+    public void ProcessJson_NullPassword_ThrowsArgumentNullException()
     {
         Assert.Throws<ArgumentNullException>(() => JsonCryptoHelper.ProcessJson([], null!, Operation.Encrypt));
     }
 
     [Fact]
-    public void ProcessJson_ThrowsArgumentException_WhenPasswordIsEmpty()
+    public void ProcessJson_EmptyPassword_ThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson([], "", Operation.Encrypt));
     }
 
     [Fact]
-    public void ProcessJson_ThrowsArgumentException_WhenPasswordIsWhitespace()
+    public void ProcessJson_WhitespacePassword_ThrowsArgumentException()
     {
         Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson([], " ", Operation.Encrypt));
     }
 
     [Fact]
-    public void ProcessJson_EncryptsJson_WhenOperationIsEncrypt()
+    public void ProcessJson_EncryptOperation_EncryptsJson()
     {
         // Arrange
         var jsonObj = new JsonObject
@@ -49,7 +49,7 @@ public class JsonCryptoHelperTests
     }
 
     [Fact]
-    public void ProcessJson_DecryptsJson_WhenOperationIsDecrypt()
+    public void ProcessJson_DecryptOperation_DecryptsJson()
     {
         // Arrange
         var jsonObj = new JsonObject
@@ -67,7 +67,7 @@ public class JsonCryptoHelperTests
     }
 
     [Fact]
-    public void ProcessJson_ReturnsIndentedJson()
+    public void ProcessJson_EncryptOperation_ReturnsIndentedJson()
     {
         // Arrange
         var jsonObj = new JsonObject
@@ -124,7 +124,7 @@ public class JsonCryptoHelperTests
     }
 
     [Fact]
-    public void ProcessJson_Decrypt_WithWrongPassword_ThrowsCryptographicException()
+    public void ProcessJson_DecryptWithWrongPassword_ThrowsCryptographicException()
     {
         // Arrange
         var jsonObj = new JsonObject
@@ -139,7 +139,7 @@ public class JsonCryptoHelperTests
     }
 
     [Fact]
-    public void ProcessJson_Decrypt_WithTamperedCiphertext_ThrowsCryptographicException()
+    public void ProcessJson_DecryptWithTamperedCiphertext_ThrowsCryptographicException()
     {
         // Arrange
         var jsonObj = new JsonObject
@@ -159,7 +159,7 @@ public class JsonCryptoHelperTests
     }
 
     [Fact]
-    public void ProcessJson_Decrypt_WithNonBase64Value_ThrowsFormatException()
+    public void ProcessJson_DecryptWithNonBase64Value_ThrowsFormatException()
     {
         // Arrange
         var jsonObj = new JsonObject
@@ -173,7 +173,7 @@ public class JsonCryptoHelperTests
     }
 
     [Fact]
-    public void ProcessJson_Decrypt_WithTruncatedPayload_Throws()
+    public void ProcessJson_DecryptWithTruncatedPayload_ThrowsOverflowException()
     {
         // Arrange
         var jsonObj = new JsonObject
@@ -187,7 +187,7 @@ public class JsonCryptoHelperTests
     }
 
     [Fact]
-    public void ProcessJson_Encrypt_UsesNonZeroNonce()
+    public void ProcessJson_EncryptOperation_UsesNonZeroNonce()
     {
         // Arrange
         var jsonObj = new JsonObject
