@@ -106,7 +106,6 @@ public static class JsonCryptoHelper
     /// <param name="value">The value to be encrypted.</param>
     /// <param name="password">The password to use for encryption.</param>
     /// <returns>A <see cref="string"/> representing the Base64 string packing the salt, nonce, authentication tag, and ciphertext.</returns>
-    /// <remarks>A fresh random salt and nonce are generated on every call.</remarks>
     private static string EncryptValue(string value, string password)
     {
         // Generate a random salt
