@@ -1,6 +1,6 @@
 # JsonCrypter
 
-A cross-platform console app that encrypts and decrypts the values of JSON files using **AES-GCM 256**, with keys derived from a password via **Argon2id**.
+A console app that encrypts and decrypts the values of JSON files using **AES-GCM 256**, with keys derived from a password via **Argon2id**.
 
 ## Features
 
