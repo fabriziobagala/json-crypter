@@ -1,8 +1,9 @@
 using System.Security.Cryptography;
 using System.Text;
+using System.Text.Encodings.Web;
+using System.Text.Json;
+using System.Text.Json.Nodes;
 using JsonCrypter.Models;
-using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
 
 namespace JsonCrypter.Services;
 
@@ -13,6 +14,12 @@ public static class JsonCryptoService
 {
     private const int SaltSize = 16; // 128 bits
 
+    private static readonly JsonSerializerOptions SerializerOptions = new()
+    {
+        WriteIndented = true,
+        Encoder = JavaScriptEncoder.UnsafeRelaxedJsonEscaping
+    };
+
     /// <summary>
     /// Processes a JSON object by either encrypting or decrypting its values based on the specified operation.
     /// </summary>
@@ -22,27 +29,27 @@ public static class JsonCryptoService
     /// <returns>The processed JSON object as a string with indented formatting.</returns>
     /// <exception cref="ArgumentNullException">Thrown when jsonObj is null.</exception>
     /// <exception cref="ArgumentException">Thrown when password is null, empty, or consists only of white-space characters.</exception>
-    public static string ProcessJson(JObject jsonObj, string password, Operation operation)
+    public static string ProcessJson(JsonObject jsonObj, string password, Operation operation)
     {
         ArgumentNullException.ThrowIfNull(jsonObj);
         ArgumentException.ThrowIfNullOrWhiteSpace(password);
 
-        var encryptedJson = ProcessNestedValues(jsonObj, password, operation);
-        return encryptedJson.ToString(Formatting.Indented);
+        var processedJson = ProcessNestedValues(jsonObj, password, operation);
+        return processedJson.ToJsonString(SerializerOptions);
     }
 
     /// <summary>
-    /// Processes nested values in a JSON token.
+    /// Processes nested values in a JSON node.
     /// </summary>
-    /// <param name="token">The JSON token to process.</param>
+    /// <param name="node">The JSON node to process.</param>
     /// <param name="password">The password to use for encryption or decryption.</param>
     /// <param name="operation">The operation to perform (encryption or decryption).</param>
-    /// <returns>The processed JSON token.</returns>
-    private static JToken ProcessNestedValues(JToken token, string password, Operation operation) => token.Type switch
+    /// <returns>The processed JSON node.</returns>
+    private static JsonNode ProcessNestedValues(JsonNode? node, string password, Operation operation) => node switch
     {
-        JTokenType.Object => ProcessObject((JObject)token, password, operation),
-        JTokenType.Array => ProcessArray((JArray)token, password, operation),
-        _ => (JToken)ExecuteOperation(operation, token.ToString(), password)
+        JsonObject obj => ProcessObject(obj, password, operation),
+        JsonArray array => ProcessArray(array, password, operation),
+        _ => JsonValue.Create(ExecuteOperation(operation, node?.ToString() ?? string.Empty, password))!
     };
 
     /// <summary>
@@ -64,12 +71,12 @@ public static class JsonCryptoService
     /// <param name="password">The password to use for encryption or decryption.</param>
     /// <param name="operation">The operation to perform (encryption or decryption).</param>
     /// <returns>A new JSON object with the processed nested values.</returns>
-    private static JObject ProcessObject(JObject obj, string password, Operation operation)
+    private static JsonObject ProcessObject(JsonObject obj, string password, Operation operation)
     {
-        var processedObj = new JObject();
-        foreach (var property in obj.Properties())
+        var processedObj = new JsonObject();
+        foreach (var property in obj)
         {
-            processedObj.Add(property.Name, ProcessNestedValues(property.Value, password, operation));
+            processedObj.Add(property.Key, ProcessNestedValues(property.Value, password, operation));
         }
         return processedObj;
     }
@@ -81,9 +88,9 @@ public static class JsonCryptoService
     /// <param name="password">The password to use for encryption or decryption.</param>
     /// <param name="operation">The operation to perform (encryption or decryption).</param>
     /// <returns>A new JSON array with the processed nested values.</returns>
-    private static JArray ProcessArray(JArray array, string password, Operation operation)
+    private static JsonArray ProcessArray(JsonArray array, string password, Operation operation)
     {
-        var processedArray = new JArray();
+        var processedArray = new JsonArray();
         foreach (var item in array)
         {
             processedArray.Add(ProcessNestedValues(item, password, operation));

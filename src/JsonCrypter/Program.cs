@@ -3,7 +3,7 @@ using CommandLine;
 using JsonCrypter.Exceptions;
 using JsonCrypter.Models;
 using JsonCrypter.Services;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 
 Parser.Default.ParseArguments<Options>(args)
     .WithParsed(RunWithOptions);
@@ -27,7 +27,7 @@ static void RunWithOptions(Options opts)
     PathExtensionException.ThrowIfNotJson(opts.FilePath);
 
     var jsonString = File.ReadAllText(opts.FilePath);
-    var jsonObject = JObject.Parse(jsonString);
+    var jsonObject = JsonNode.Parse(jsonString)!.AsObject();
 
     switch (opts.Operation)
     {

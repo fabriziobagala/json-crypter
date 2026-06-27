@@ -1,6 +1,6 @@
 using JsonCrypter.Models;
 using JsonCrypter.Services;
-using Newtonsoft.Json.Linq;
+using System.Text.Json.Nodes;
 
 namespace JsonCrypter.Tests.Services;
 
@@ -15,26 +15,26 @@ public class JsonCryptoServiceTests
     [Fact]
     public void ProcessJson_ThrowsArgumentNullException_WhenPasswordIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => JsonCryptoService.ProcessJson([], null!, Operation.Encrypt));
+        Assert.Throws<ArgumentNullException>(() => JsonCryptoService.ProcessJson(new JsonObject(),null!, Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_ThrowsArgumentException_WhenPasswordIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => JsonCryptoService.ProcessJson([], "", Operation.Encrypt));
+        Assert.Throws<ArgumentException>(() => JsonCryptoService.ProcessJson(new JsonObject(),"", Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_ThrowsArgumentException_WhenPasswordIsWhitespace()
     {
-        Assert.Throws<ArgumentException>(() => JsonCryptoService.ProcessJson([], " ", Operation.Encrypt));
+        Assert.Throws<ArgumentException>(() => JsonCryptoService.ProcessJson(new JsonObject()," ", Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_EncryptsJson_WhenOperationIsEncrypt()
     {
         // Arrange
-        var jsonObj = new JObject
+        var jsonObj = new JsonObject
         {
             ["test"] = "value"
         };
@@ -50,14 +50,14 @@ public class JsonCryptoServiceTests
     public void ProcessJson_DecryptsJson_WhenOperationIsDecrypt()
     {
         // Arrange
-        var jsonObj = new JObject
+        var jsonObj = new JsonObject
         {
             ["test"] = "value"
         };
         var encrypted = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
 
         // Act
-        var decrypted = JsonCryptoService.ProcessJson(JObject.Parse(encrypted), "password", Operation.Decrypt);
+        var decrypted = JsonCryptoService.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "password", Operation.Decrypt);
 
         // Assert
         Assert.Equal(jsonObj.ToString(), decrypted);
@@ -67,7 +67,7 @@ public class JsonCryptoServiceTests
     public void ProcessJson_ReturnsIndentedJson()
     {
         // Arrange
-        var jsonObj = new JObject
+        var jsonObj = new JsonObject
         {
             ["test"] = "value"
         };
