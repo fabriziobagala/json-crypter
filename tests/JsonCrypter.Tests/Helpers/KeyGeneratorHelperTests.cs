@@ -9,16 +9,16 @@ public class KeyGeneratorHelperTests
     public void GenerateKeyBytes_ValidInput_ReturnsByteArrayOfCorrectLength()
     {
         // Arrange
+        const int expectedKeySizeInBytes = 32;
         var password = "testPassword";
         var salt = Encoding.UTF8.GetBytes("testSalt");
-        var expectedLength = 32;
 
         // Act
         var result = KeyGeneratorHelper.GenerateKeyBytes(password, salt);
 
         // Assert
         Assert.NotNull(result);
-        Assert.Equal(expectedLength, result.Length);
+        Assert.Equal(expectedKeySizeInBytes, result.Length);
     }
 
     [Fact]
