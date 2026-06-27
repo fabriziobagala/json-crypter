@@ -16,19 +16,19 @@ public class JsonCryptoHelperTests
     [Fact]
     public void ProcessJson_ThrowsArgumentNullException_WhenPasswordIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => JsonCryptoHelper.ProcessJson(new JsonObject(),null!, Operation.Encrypt));
+        Assert.Throws<ArgumentNullException>(() => JsonCryptoHelper.ProcessJson([], null!, Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_ThrowsArgumentException_WhenPasswordIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson(new JsonObject(),"", Operation.Encrypt));
+        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson([], "", Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_ThrowsArgumentException_WhenPasswordIsWhitespace()
     {
-        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson(new JsonObject()," ", Operation.Encrypt));
+        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson([], " ", Operation.Encrypt));
     }
 
     [Fact]
