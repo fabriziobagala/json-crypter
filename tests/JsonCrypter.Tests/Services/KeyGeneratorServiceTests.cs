@@ -20,4 +20,35 @@ public class KeyGeneratorServiceTests
         Assert.NotNull(result);
         Assert.Equal(expectedLength, result.Length);
     }
+
+    [Fact]
+    public void GenerateKeyBytes_WithSameInputs_ReturnsSameKey()
+    {
+        // Arrange
+        var password = "testPassword";
+        var salt = Encoding.UTF8.GetBytes("testSalt");
+
+        // Act
+        var first = KeyGeneratorService.GenerateKeyBytes(password, salt);
+        var second = KeyGeneratorService.GenerateKeyBytes(password, salt);
+
+        // Assert
+        Assert.Equal(first, second);
+    }
+
+    [Fact]
+    public void GenerateKeyBytes_WithDifferentSalt_ReturnsDifferentKey()
+    {
+        // Arrange
+        var password = "testPassword";
+        var salt1 = Encoding.UTF8.GetBytes("testSalt1");
+        var salt2 = Encoding.UTF8.GetBytes("testSalt2");
+
+        // Act
+        var key1 = KeyGeneratorService.GenerateKeyBytes(password, salt1);
+        var key2 = KeyGeneratorService.GenerateKeyBytes(password, salt2);
+
+        // Assert
+        Assert.NotEqual(key1, key2);
+    }
 }
