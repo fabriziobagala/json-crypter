@@ -4,18 +4,18 @@ using Konscious.Security.Cryptography;
 namespace JsonCrypter.Helpers;
 
 /// <summary>
-/// Provides a method to generate a cryptographic key using the Argon2id algorithm.
+/// Provides helper methods for generating cryptographic keys from passwords and salts.
 /// </summary>
 public static class KeyGeneratorHelper
 {
     private const int KeySize = 32; // 256 bits
 
     /// <summary>
-    /// Generates a cryptographic key using the Argon2id algorithm.
+    /// Derives a cryptographic key from a password and salt using the Argon2id algorithm.
     /// </summary>
-    /// <param name="password">The password to use for key generation.</param>
-    /// <param name="salt">The salt to use for key generation.</param>
-    /// <returns>The generated key.</returns>
+    /// <param name="password">The password to derive the key from.</param>
+    /// <param name="salt">The salt to derive the key from; a 16-byte (128-bit) value is expected.</param>
+    /// <returns>A <see cref="byte"/> array representing the derived 256-bit (32-byte) key.</returns>
     public static byte[] GenerateKeyBytes(string password, byte[] salt)
     {
         using var argon2 = new Argon2id(Encoding.UTF8.GetBytes(password))

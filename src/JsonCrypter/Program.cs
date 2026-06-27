@@ -8,14 +8,6 @@ using System.Text.Json.Nodes;
 Parser.Default.ParseArguments<Options>(args)
     .WithParsed(RunWithOptions);
 
-/// <summary>
-/// Runs the application with the specified options.
-/// </summary>
-/// <param name="opts">The options to run the application with.</param>
-/// <exception cref="ArgumentNullException">Thrown when <paramref name="opts"/> is null.</exception>
-/// <exception cref="ArgumentException">Thrown when any of the properties of <paramref name="opts"/> are null, empty, or consists only of white-space characters.</exception>
-/// <exception cref="PathExtensionException">Thrown when the file path in <paramref name="opts"/> does not have a .json extension.</exception>
-/// <exception cref="InvalidEnumArgumentException">Thrown when the operation in <paramref name="opts"/> is not a valid <see cref="Operation"/>.</exception>
 static void RunWithOptions(Options opts)
 {
     ArgumentNullException.ThrowIfNull(opts);

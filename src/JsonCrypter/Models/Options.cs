@@ -17,11 +17,12 @@ public record Options
     public string? OperationString { get; set; }
 
     /// <summary>
-    /// Gets the operation to perform.
+    /// Gets the operation to perform, parsed from <see cref="OperationString"/>.
     /// </summary>
     /// <value>
     /// The operation as an <see cref="Operation"/> enum.
     /// </value>
+    /// <exception cref="ArgumentException">Thrown when <see cref="OperationString"/> is not a valid <see cref="Operation"/> value.</exception>
     public Operation Operation => Enum.Parse<Operation>(OperationString!, true);
 
     /// <summary>

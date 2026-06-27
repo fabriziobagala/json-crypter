@@ -8,7 +8,7 @@ using JsonCrypter.Models;
 namespace JsonCrypter.Helpers;
 
 /// <summary>
-/// Provides methods for encrypting and decrypting JSON data.
+/// Provides helper methods for encrypting and decrypting JSON objects using AES-GCM with keys derived from passwords via Argon2id.
 /// </summary>
 public static class JsonCryptoHelper
 {
@@ -21,14 +21,16 @@ public static class JsonCryptoHelper
     };
 
     /// <summary>
-    /// Processes a JSON object by either encrypting or decrypting its values based on the specified operation.
+    /// Encrypts or decrypts every value of the specified JSON object, preserving its structure.
     /// </summary>
-    /// <param name="jsonObj">The JSON object to process.</param>
-    /// <param name="password">The password to use for encryption or decryption.</param>
-    /// <param name="operation">The operation to perform, either encryption or decryption.</param>
-    /// <returns>The processed JSON object as a string with indented formatting.</returns>
-    /// <exception cref="ArgumentNullException">Thrown when jsonObj is null.</exception>
-    /// <exception cref="ArgumentException">Thrown when password is null, empty, or consists only of white-space characters.</exception>
+    /// <param name="jsonObj">The JSON object whose values are processed.</param>
+    /// <param name="password">The password used to derive the cryptographic key.</param>
+    /// <param name="operation">The <see cref="Operation"/> to perform on each value.</param>
+    /// <returns>A <see cref="string"/> representing the processed JSON object.</returns>
+    /// <exception cref="ArgumentNullException">Thrown when <paramref name="jsonObj"/> is <see langword="null"/>.</exception>
+    /// <exception cref="ArgumentException">Thrown when <paramref name="password"/> is <see langword="null"/>, empty, or consists only of white-space characters.</exception>
+    /// <exception cref="FormatException">Thrown during decryption when a value is not a valid Base64 string.</exception>
+    /// <exception cref="CryptographicException">Thrown during decryption when the password is incorrect or the data has been tampered with.</exception>
     public static string ProcessJson(JsonObject jsonObj, string password, Operation operation)
     {
         ArgumentNullException.ThrowIfNull(jsonObj);
@@ -44,7 +46,7 @@ public static class JsonCryptoHelper
     /// <param name="node">The JSON node to process.</param>
     /// <param name="password">The password to use for encryption or decryption.</param>
     /// <param name="operation">The operation to perform (encryption or decryption).</param>
-    /// <returns>The processed JSON node.</returns>
+    /// <returns>A <see cref="JsonNode"/> representing the processed JSON node.</returns>
     private static JsonNode ProcessNestedValues(JsonNode? node, string password, Operation operation) => node switch
     {
         JsonObject obj => ProcessObject(obj, password, operation),
@@ -58,7 +60,7 @@ public static class JsonCryptoHelper
     /// <param name="operation">The operation to perform (encryption or decryption).</param>
     /// <param name="value">The value to be encrypted or decrypted.</param>
     /// <param name="password">The password to use for encryption or decryption.</param>
-    /// <returns>The result of the operation (encrypted or decrypted value).</returns>
+    /// <returns>A <see cref="string"/> representing the result of the operation (encrypted or decrypted value).</returns>
     private static string ExecuteOperation(Operation operation, string value, string password)
     {
         return operation == Operation.Encrypt ? EncryptValue(value, password) : DecryptValue(value, password);
@@ -70,7 +72,7 @@ public static class JsonCryptoHelper
     /// <param name="obj">The JSON object to process.</param>
     /// <param name="password">The password to use for encryption or decryption.</param>
     /// <param name="operation">The operation to perform (encryption or decryption).</param>
-    /// <returns>A new JSON object with the processed nested values.</returns>
+    /// <returns>A <see cref="JsonObject"/> representing the processed JSON object.</returns>
     private static JsonObject ProcessObject(JsonObject obj, string password, Operation operation)
     {
         var processedObj = new JsonObject();
@@ -87,7 +89,7 @@ public static class JsonCryptoHelper
     /// <param name="array">The JSON array to process.</param>
     /// <param name="password">The password to use for encryption or decryption.</param>
     /// <param name="operation">The operation to perform (encryption or decryption).</param>
-    /// <returns>A new JSON array with the processed nested values.</returns>
+    /// <returns>A <see cref="JsonArray"/> representing the processed JSON array.</returns>
     private static JsonArray ProcessArray(JsonArray array, string password, Operation operation)
     {
         var processedArray = new JsonArray();
@@ -103,7 +105,8 @@ public static class JsonCryptoHelper
     /// </summary>
     /// <param name="value">The value to be encrypted.</param>
     /// <param name="password">The password to use for encryption.</param>
-    /// <returns>The encrypted value as a Base64 string.</returns>
+    /// <returns>A <see cref="string"/> representing the Base64 string packing the salt, nonce, authentication tag, and ciphertext.</returns>
+    /// <remarks>A fresh random salt and nonce are generated on every call.</remarks>
     private static string EncryptValue(string value, string password)
     {
         // Generate a random salt
@@ -139,7 +142,9 @@ public static class JsonCryptoHelper
     /// </summary>
     /// <param name="encryptedValue">The encrypted value to be decrypted, represented as a Base64 string.</param>
     /// <param name="password">The password to use for decryption.</param>
-    /// <returns>The decrypted value as a UTF8 string.</returns>
+    /// <returns>A <see cref="string"/> representing the decrypted value as a UTF-8 string.</returns>
+    /// <exception cref="FormatException">Thrown when <paramref name="encryptedValue"/> is not a valid Base64 string.</exception>
+    /// <exception cref="CryptographicException">Thrown when the password is incorrect or the data has been tampered with.</exception>
     private static string DecryptValue(string encryptedValue, string password)
     {
         // Convert the encrypted value from a Base64 string to a byte array
