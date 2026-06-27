@@ -5,12 +5,12 @@ using System.Text.Json;
 using System.Text.Json.Nodes;
 using JsonCrypter.Models;
 
-namespace JsonCrypter.Services;
+namespace JsonCrypter.Helpers;
 
 /// <summary>
 /// Provides methods for encrypting and decrypting JSON data.
 /// </summary>
-public static class JsonCryptoService
+public static class JsonCryptoHelper
 {
     private const int SaltSize = 16; // 128 bits
 
@@ -110,7 +110,7 @@ public static class JsonCryptoService
         var salt = RandomNumberGenerator.GetBytes(SaltSize);
 
         // Generate a key using the password and salt
-        var key = KeyGeneratorService.GenerateKeyBytes(password, salt);
+        var key = KeyGeneratorHelper.GenerateKeyBytes(password, salt);
 
         // Encrypt the value
         using var aesGcm = new AesGcm(key, AesGcm.TagByteSizes.MaxSize);
@@ -158,7 +158,7 @@ public static class JsonCryptoService
         Buffer.BlockCopy(encryptedBytes, SaltSize + AesGcm.NonceByteSizes.MaxSize + AesGcm.TagByteSizes.MaxSize, cipherText, 0, cipherText.Length);
 
         // Generate the key from the password and salt
-        var key = KeyGeneratorService.GenerateKeyBytes(password, salt);
+        var key = KeyGeneratorHelper.GenerateKeyBytes(password, salt);
 
         // Decrypt the ciphertext
         using var aes = new AesGcm(new ReadOnlySpan<byte>(key), AesGcm.TagByteSizes.MaxSize);

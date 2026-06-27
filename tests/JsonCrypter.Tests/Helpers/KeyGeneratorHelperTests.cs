@@ -1,9 +1,9 @@
 using System.Text;
-using JsonCrypter.Services;
+using JsonCrypter.Helpers;
 
-namespace JsonCrypter.Tests.Services;
+namespace JsonCrypter.Tests.Helpers;
 
-public class KeyGeneratorServiceTests
+public class KeyGeneratorHelperTests
 {
     [Fact]
     public void GenerateKeyBytes_ShouldReturnByteArrayOfCorrectLength()
@@ -14,7 +14,7 @@ public class KeyGeneratorServiceTests
         var expectedLength = 32;
 
         // Act
-        var result = KeyGeneratorService.GenerateKeyBytes(password, salt);
+        var result = KeyGeneratorHelper.GenerateKeyBytes(password, salt);
 
         // Assert
         Assert.NotNull(result);
@@ -29,8 +29,8 @@ public class KeyGeneratorServiceTests
         var salt = Encoding.UTF8.GetBytes("testSalt");
 
         // Act
-        var first = KeyGeneratorService.GenerateKeyBytes(password, salt);
-        var second = KeyGeneratorService.GenerateKeyBytes(password, salt);
+        var first = KeyGeneratorHelper.GenerateKeyBytes(password, salt);
+        var second = KeyGeneratorHelper.GenerateKeyBytes(password, salt);
 
         // Assert
         Assert.Equal(first, second);
@@ -45,8 +45,8 @@ public class KeyGeneratorServiceTests
         var salt2 = Encoding.UTF8.GetBytes("testSalt2");
 
         // Act
-        var key1 = KeyGeneratorService.GenerateKeyBytes(password, salt1);
-        var key2 = KeyGeneratorService.GenerateKeyBytes(password, salt2);
+        var key1 = KeyGeneratorHelper.GenerateKeyBytes(password, salt1);
+        var key2 = KeyGeneratorHelper.GenerateKeyBytes(password, salt2);
 
         // Assert
         Assert.NotEqual(key1, key2);

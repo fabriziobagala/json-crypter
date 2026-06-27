@@ -1,12 +1,12 @@
 using System.Text;
 using Konscious.Security.Cryptography;
 
-namespace JsonCrypter.Services;
+namespace JsonCrypter.Helpers;
 
 /// <summary>
 /// Provides a method to generate a cryptographic key using the Argon2id algorithm.
 /// </summary>
-public static class KeyGeneratorService
+public static class KeyGeneratorHelper
 {
     private const int KeySize = 32; // 256 bits
 

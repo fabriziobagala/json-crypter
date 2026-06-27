@@ -1,34 +1,34 @@
 using System.Security.Cryptography;
 using System.Text.Json.Nodes;
 using JsonCrypter.Models;
-using JsonCrypter.Services;
+using JsonCrypter.Helpers;
 
-namespace JsonCrypter.Tests.Services;
+namespace JsonCrypter.Tests.Helpers;
 
-public class JsonCryptoServiceTests
+public class JsonCryptoHelperTests
 {
     [Fact]
     public void ProcessJson_ThrowsArgumentNullException_WhenJsonObjIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => JsonCryptoService.ProcessJson(null!, "password", Operation.Encrypt));
+        Assert.Throws<ArgumentNullException>(() => JsonCryptoHelper.ProcessJson(null!, "password", Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_ThrowsArgumentNullException_WhenPasswordIsNull()
     {
-        Assert.Throws<ArgumentNullException>(() => JsonCryptoService.ProcessJson(new JsonObject(),null!, Operation.Encrypt));
+        Assert.Throws<ArgumentNullException>(() => JsonCryptoHelper.ProcessJson(new JsonObject(),null!, Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_ThrowsArgumentException_WhenPasswordIsEmpty()
     {
-        Assert.Throws<ArgumentException>(() => JsonCryptoService.ProcessJson(new JsonObject(),"", Operation.Encrypt));
+        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson(new JsonObject(),"", Operation.Encrypt));
     }
 
     [Fact]
     public void ProcessJson_ThrowsArgumentException_WhenPasswordIsWhitespace()
     {
-        Assert.Throws<ArgumentException>(() => JsonCryptoService.ProcessJson(new JsonObject()," ", Operation.Encrypt));
+        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson(new JsonObject()," ", Operation.Encrypt));
     }
 
     [Fact]
@@ -41,7 +41,7 @@ public class JsonCryptoServiceTests
         };
 
         // Act
-        var result = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var result = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
 
         // Assert
         Assert.NotEqual(jsonObj.ToString(), result);
@@ -56,10 +56,10 @@ public class JsonCryptoServiceTests
         {
             ["test"] = "value"
         };
-        var encrypted = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var encrypted = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
 
         // Act
-        var decrypted = JsonCryptoService.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "password", Operation.Decrypt);
+        var decrypted = JsonCryptoHelper.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "password", Operation.Decrypt);
 
         // Assert
         var result = JsonNode.Parse(decrypted)!.AsObject();
@@ -76,7 +76,7 @@ public class JsonCryptoServiceTests
         };
 
         // Act
-        var result = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var result = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
 
         // Assert
         Assert.Contains("\n", result);
@@ -94,8 +94,8 @@ public class JsonCryptoServiceTests
         };
 
         // Act
-        var encrypted = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
-        var decrypted = JsonCryptoService.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "password", Operation.Decrypt);
+        var encrypted = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var decrypted = JsonCryptoHelper.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "password", Operation.Decrypt);
 
         // Assert
         var result = JsonNode.Parse(decrypted)!.AsObject();
@@ -115,8 +115,8 @@ public class JsonCryptoServiceTests
         };
 
         // Act
-        var encrypted = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
-        var decrypted = JsonCryptoService.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "password", Operation.Decrypt);
+        var encrypted = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var decrypted = JsonCryptoHelper.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "password", Operation.Decrypt);
 
         // Assert
         var result = JsonNode.Parse(decrypted)!.AsObject();
@@ -131,11 +131,11 @@ public class JsonCryptoServiceTests
         {
             ["test"] = "value"
         };
-        var encrypted = JsonCryptoService.ProcessJson(jsonObj, "correct-password", Operation.Encrypt);
+        var encrypted = JsonCryptoHelper.ProcessJson(jsonObj, "correct-password", Operation.Encrypt);
 
         // Act & Assert
         Assert.ThrowsAny<CryptographicException>(() =>
-            JsonCryptoService.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "wrong-password", Operation.Decrypt));
+            JsonCryptoHelper.ProcessJson(JsonNode.Parse(encrypted)!.AsObject(), "wrong-password", Operation.Decrypt));
     }
 
     [Fact]
@@ -146,7 +146,7 @@ public class JsonCryptoServiceTests
         {
             ["test"] = "value"
         };
-        var encrypted = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var encrypted = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
         var encObj = JsonNode.Parse(encrypted)!.AsObject();
 
         var bytes = Convert.FromBase64String(encObj["test"]!.GetValue<string>());
@@ -155,7 +155,7 @@ public class JsonCryptoServiceTests
 
         // Act & Assert
         Assert.ThrowsAny<CryptographicException>(() =>
-            JsonCryptoService.ProcessJson(encObj, "password", Operation.Decrypt));
+            JsonCryptoHelper.ProcessJson(encObj, "password", Operation.Decrypt));
     }
 
     [Fact]
@@ -169,7 +169,7 @@ public class JsonCryptoServiceTests
 
         // Act & Assert
         Assert.Throws<FormatException>(() =>
-            JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Decrypt));
+            JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Decrypt));
     }
 
     [Fact]
@@ -183,7 +183,7 @@ public class JsonCryptoServiceTests
 
         // Act & Assert (cipherText length goes negative -> overflow when sizing the buffer)
         Assert.Throws<OverflowException>(() =>
-            JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Decrypt));
+            JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Decrypt));
     }
 
     [Fact]
@@ -196,7 +196,7 @@ public class JsonCryptoServiceTests
         };
 
         // Act
-        var encrypted = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var encrypted = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
         var payload = Convert.FromBase64String(JsonNode.Parse(encrypted)!.AsObject()["test"]!.GetValue<string>());
 
         // Assert: the 12-byte nonce stored after the 16-byte salt must not be all zeros
