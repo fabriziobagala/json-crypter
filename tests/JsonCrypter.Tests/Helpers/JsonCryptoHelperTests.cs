@@ -19,16 +19,12 @@ public class JsonCryptoHelperTests
         Assert.Throws<ArgumentNullException>(() => JsonCryptoHelper.ProcessJson([], null!, Operation.Encrypt));
     }
 
-    [Fact]
-    public void ProcessJson_EmptyPassword_ThrowsArgumentException()
+    [Theory]
+    [InlineData("")]
+    [InlineData(" ")]
+    public void ProcessJson_EmptyOrWhitespacePassword_ThrowsArgumentException(string password)
     {
-        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson([], "", Operation.Encrypt));
-    }
-
-    [Fact]
-    public void ProcessJson_WhitespacePassword_ThrowsArgumentException()
-    {
-        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson([], " ", Operation.Encrypt));
+        Assert.Throws<ArgumentException>(() => JsonCryptoHelper.ProcessJson([], password, Operation.Encrypt));
     }
 
     [Fact]
@@ -181,7 +177,7 @@ public class JsonCryptoHelperTests
             ["test"] = Convert.ToBase64String(new byte[10])
         };
 
-        // Act & Assert (cipherText length goes negative -> overflow when sizing the buffer)
+        // Act & Assert
         Assert.Throws<OverflowException>(() =>
             JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Decrypt));
     }
@@ -199,7 +195,7 @@ public class JsonCryptoHelperTests
         var encrypted = JsonCryptoHelper.ProcessJson(jsonObj, "password", Operation.Encrypt);
         var payload = Convert.FromBase64String(JsonNode.Parse(encrypted)!.AsObject()["test"]!.GetValue<string>());
 
-        // Assert: the 12-byte nonce stored after the 16-byte salt must not be all zeros
+        // Assert
         const int saltSize = 16;
         const int nonceSize = 12;
         var nonce = payload[saltSize..(saltSize + nonceSize)];
