@@ -18,6 +18,19 @@ public class PathExtensionExceptionTests
     }
 
     [Fact]
+    public void ThrowIfNotJson_WithUppercaseJsonExtension_DoesNotThrow()
+    {
+        // Arrange
+        var filePath = "test.JSON";
+
+        // Act
+        var exception = Record.Exception(() => PathExtensionException.ThrowIfNotJson(filePath));
+
+        // Assert
+        Assert.Null(exception);
+    }
+
+    [Fact]
     public void ThrowIfNotJson_WithNonJsonExtension_ThrowsPathExtensionException()
     {
         // Arrange

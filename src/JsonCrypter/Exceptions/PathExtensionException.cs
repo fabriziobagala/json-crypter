@@ -14,7 +14,7 @@ public class PathExtensionException : Exception
     }
 
     /// <summary>
-    /// Initializes a new instance of the <see cref="PathExtensionException"/> class with a specified error message and 
+    /// Initializes a new instance of the <see cref="PathExtensionException"/> class with a specified error message and
     /// a reference to the inner exception that is the cause of this exception.
     /// </summary>
     /// <param name="message">The message that describes the error.</param>
@@ -24,12 +24,13 @@ public class PathExtensionException : Exception
     }
 
     /// <summary>
-    /// Throws a <see cref="PathExtensionException"/> if the file extension of the provided path is not .json.
+    /// Throws a <see cref="PathExtensionException"/> if the file extension of the provided path is not <c>.json</c>.
     /// </summary>
     /// <param name="filePath">The file path to check.</param>
+    /// <exception cref="PathExtensionException">Thrown when <paramref name="filePath"/> does not have a <c>.json</c> extension.</exception>
     public static void ThrowIfNotJson(string filePath)
     {
-        if (Path.GetExtension(filePath) != ".json")
+        if (!string.Equals(Path.GetExtension(filePath), ".json", StringComparison.OrdinalIgnoreCase))
         {
             throw new PathExtensionException("Invalid file type. Please provide a JSON file.");
         }
