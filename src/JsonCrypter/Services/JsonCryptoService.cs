@@ -114,7 +114,7 @@ public static class JsonCryptoService
 
         // Encrypt the value
         using var aesGcm = new AesGcm(key, AesGcm.TagByteSizes.MaxSize);
-        var nonce = new byte[AesGcm.NonceByteSizes.MaxSize];
+        var nonce = RandomNumberGenerator.GetBytes(AesGcm.NonceByteSizes.MaxSize);
         var plaintext = Encoding.UTF8.GetBytes(value);
         var ciphertext = new byte[plaintext.Length];
         var tag = new byte[AesGcm.TagByteSizes.MaxSize];

@@ -181,8 +181,28 @@ public class JsonCryptoServiceTests
             ["test"] = Convert.ToBase64String(new byte[10])
         };
 
-        // Act & Assert
-        Assert.ThrowsAny<Exception>(() =>
+        // Act & Assert (cipherText length goes negative -> overflow when sizing the buffer)
+        Assert.Throws<OverflowException>(() =>
             JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Decrypt));
+    }
+
+    [Fact]
+    public void ProcessJson_Encrypt_UsesNonZeroNonce()
+    {
+        // Arrange
+        var jsonObj = new JsonObject
+        {
+            ["test"] = "value"
+        };
+
+        // Act
+        var encrypted = JsonCryptoService.ProcessJson(jsonObj, "password", Operation.Encrypt);
+        var payload = Convert.FromBase64String(JsonNode.Parse(encrypted)!.AsObject()["test"]!.GetValue<string>());
+
+        // Assert: the 12-byte nonce stored after the 16-byte salt must not be all zeros
+        const int saltSize = 16;
+        const int nonceSize = 12;
+        var nonce = payload[saltSize..(saltSize + nonceSize)];
+        Assert.Contains(nonce, b => b != 0);
     }
 }
