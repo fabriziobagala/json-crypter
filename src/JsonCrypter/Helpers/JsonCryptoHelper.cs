@@ -12,7 +12,7 @@ namespace JsonCrypter.Helpers;
 /// </summary>
 public static class JsonCryptoHelper
 {
-    private const int SaltSize = 16; // 128 bits
+    internal const int SaltSize = 16; // 128 bits
 
     private static readonly JsonSerializerOptions SerializerOptions = new()
     {

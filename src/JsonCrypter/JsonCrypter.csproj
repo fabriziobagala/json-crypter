@@ -17,4 +17,8 @@
     <PackageReference Include="Konscious.Security.Cryptography.Argon2" />
   </ItemGroup>
 
+  <ItemGroup>
+    <InternalsVisibleTo Include="JsonCrypter.Tests" />
+  </ItemGroup>
+
 </Project>
