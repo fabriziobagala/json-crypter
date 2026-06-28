@@ -12,9 +12,7 @@
   <!-- .NET -->
   <img src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge" alt=".NET 10">
   <!-- License -->
-  <a href="LICENSE">
-    <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License: MIT">
-  </a>
+  <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License: MIT">
 </div>
 
 ## Table of Contents
@@ -159,6 +157,8 @@ After downloading and extracting the archive for your platform, the executables 
 ### macOS
 
 ```bash
+curl -L -o JsonCrypter.zip https://github.com/fabriziobagala/json-crypter/releases/download/v1.0.0/JsonCrypter-v1.0.0-osx-arm64.zip
+unzip JsonCrypter.zip
 chmod +x JsonCrypter                          # ensure it is executable
 xattr -d com.apple.quarantine JsonCrypter     # clear the Gatekeeper quarantine flag
 ./JsonCrypter -o encrypt -f example.json -p mysecretpassword
@@ -169,6 +169,8 @@ Alternatively, run it once, then go to **System Settings → Privacy & Security*
 ### Linux
 
 ```bash
+curl -L -o JsonCrypter.zip https://github.com/fabriziobagala/json-crypter/releases/download/v1.0.0/JsonCrypter-v1.0.0-linux-x64.zip
+unzip JsonCrypter.zip
 chmod +x JsonCrypter
 ./JsonCrypter -o encrypt -f example.json -p mysecretpassword
 ```
@@ -176,6 +178,8 @@ chmod +x JsonCrypter
 ### Windows
 
 ```powershell
+Invoke-WebRequest -Uri https://github.com/fabriziobagala/json-crypter/releases/download/v1.0.0/JsonCrypter-v1.0.0-win-x64.zip -OutFile JsonCrypter.zip
+Expand-Archive JsonCrypter.zip -DestinationPath .
 .\JsonCrypter.exe -o encrypt -f example.json -p mysecretpassword
 ```
 
