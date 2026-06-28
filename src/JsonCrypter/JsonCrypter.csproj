@@ -3,8 +3,13 @@
   <PropertyGroup>
     <OutputType>Exe</OutputType>
     <Authors>Fabrizio Bagalà</Authors>
+    <Product>JsonCrypter</Product>
     <Version>1.0.0</Version>
     <Description>A console app that encrypts and decrypts the values of JSON files using AES-GCM 256, with keys derived from a password via Argon2id.</Description>
+    <Copyright>Copyright © 2026 Fabrizio Bagalà</Copyright>
+    <RepositoryUrl>https://github.com/fabriziobagala/json-crypter</RepositoryUrl>
+    <RepositoryType>git</RepositoryType>
+    <PackageProjectUrl>https://github.com/fabriziobagala/json-crypter</PackageProjectUrl>
   </PropertyGroup>
 
   <ItemGroup>
