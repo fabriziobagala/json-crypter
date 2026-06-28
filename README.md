@@ -1,6 +1,32 @@
-# JsonCrypter
+<h1 align="center">JsonCrypter</h1>
 
-A console app that encrypts and decrypts the values of JSON files using **AES-GCM 256**, with keys derived from a password via **Argon2id**.
+<div align="center">
+  <strong>Encrypts and decrypts the values of JSON files while preserving their structure.</strong><br>
+  AES-GCM 256 authenticated encryption, with per-value keys derived from a password via Argon2id.<br>
+  <sub>Tampered data or a wrong password are detected and rejected.</sub>
+</div>
+
+<br>
+
+<div align="center">
+  <!-- .NET -->
+  <img src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge" alt=".NET 10">
+  <!-- License -->
+  <a href="LICENSE">
+    <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License: MIT">
+  </a>
+</div>
+
+## Table of Contents
+
+- [Features](#features)
+- [How it works](#how-it-works)
+- [Prerequisites](#prerequisites)
+- [Usage](#usage)
+- [Build from source](#build-from-source)
+- [Running a downloaded release](#running-a-downloaded-release)
+- [Publishing a standalone executable](#publishing-a-standalone-executable)
+- [License](#license)
 
 ## Features
 
@@ -25,20 +51,6 @@ Decryption reverses the process: it reads the salt and nonce back from the paylo
 
 - [.NET 10 SDK](https://dotnet.microsoft.com/en-us/download) - required to build, run, or publish from source.
 - To run a **published standalone executable**, nothing else is needed: the .NET runtime is bundled.
-
-## Build from source
-
-```bash
-git clone https://github.com/fabriziobagala/json-crypter.git
-cd json-crypter
-dotnet build
-```
-
-To run directly with the SDK:
-
-```bash
-dotnet run --project src/JsonCrypter -- -o encrypt -f example.json -p mysecretpassword
-```
 
 ## Usage
 
@@ -126,6 +138,20 @@ Decrypt it again with the same password to restore the original content:
 JsonCrypter -o decrypt -f example.json -p mysecretpassword
 ```
 
+## Build from source
+
+```bash
+git clone https://github.com/fabriziobagala/json-crypter.git
+cd json-crypter
+dotnet build
+```
+
+To run directly with the SDK:
+
+```bash
+dotnet run --project src/JsonCrypter -- -o encrypt -f example.json -p mysecretpassword
+```
+
 ## Running a downloaded release
 
 After downloading and extracting the archive for your platform, the executables are **not code-signed**, so each operating system needs a small one-time step to allow them to run.
@@ -194,22 +220,6 @@ To reduce the size of the bundled file, you can enable compression:
 ```
 
 > **Trimming and Native AOT are not recommended.** The command-line parsing relies on runtime reflection, which `PublishTrimmed=true` or `PublishAot=true` can break. Stick to the self-contained single-file build above for a reliable standalone executable.
-
-## Running the tests
-
-```bash
-dotnet test
-```
-
-## Project structure
-
-```
-json-crypter/
-├── src/
-│   └── JsonCrypter/          # Console application
-└── tests/
-    └── JsonCrypter.Tests/    # xUnit v3 test suite
-```
 
 ## License
 
