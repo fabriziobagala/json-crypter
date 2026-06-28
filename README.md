@@ -126,6 +126,35 @@ Decrypt it again with the same password to restore the original content:
 JsonCrypter -o decrypt -f example.json -p mysecretpassword
 ```
 
+## Running a downloaded release
+
+After downloading and extracting the archive for your platform, the executables are **not code-signed**, so each operating system needs a small one-time step to allow them to run.
+
+### macOS
+
+```bash
+chmod +x JsonCrypter                          # ensure it is executable
+xattr -d com.apple.quarantine JsonCrypter     # clear the Gatekeeper quarantine flag
+./JsonCrypter -o encrypt -f example.json -p mysecretpassword
+```
+
+Alternatively, run it once, then go to **System Settings → Privacy & Security** and click **Open Anyway**.
+
+### Linux
+
+```bash
+chmod +x JsonCrypter
+./JsonCrypter -o encrypt -f example.json -p mysecretpassword
+```
+
+### Windows
+
+```powershell
+.\JsonCrypter.exe -o encrypt -f example.json -p mysecretpassword
+```
+
+If SmartScreen shows *"Windows protected your PC"*, click **More info → Run anyway**.
+
 ## Publishing a standalone executable
 
 You can package JsonCrypter as a **self-contained, single-file executable** that runs on a machine without the .NET runtime installed.
