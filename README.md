@@ -11,6 +11,8 @@
 <div align="center">
   <!-- .NET -->
   <img src="https://img.shields.io/badge/.NET-10-512BD4?style=for-the-badge" alt=".NET 10">
+  <!-- Coverage -->
+  <img src="https://img.shields.io/badge/coverage-80%25-success?style=for-the-badge" alt="Coverage 80%">
   <!-- License -->
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License: MIT">
 </div>
