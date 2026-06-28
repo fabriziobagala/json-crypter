@@ -15,6 +15,8 @@
   <img src="https://img.shields.io/badge/license-MIT-blue?style=for-the-badge" alt="License: MIT">
 </div>
 
+---
+
 ## Table of Contents
 
 - [Features](#features)
